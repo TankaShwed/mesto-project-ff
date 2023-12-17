@@ -17,14 +17,9 @@ function makeCard(name, link) {
   return cardElement;
 }
 
-function onDelButton(card){
-   card.remove();
+function onDelButton(card) {
+  card.remove();
 }
-
-// addButton.addEventListener("click", function () {
-//     const popup = document.querySelector(".popup_type_new-card");
-//     popup.style.display = 'block';
-// });
 
 initialCards.forEach((item) => {
   placesContent.append(makeCard(item.name, item.link));
