@@ -1,14 +1,15 @@
 const content = document.querySelector(".content");
+const cardTemplate = document.querySelector("#card-template").content;
 const placesContent = content.querySelector(".places__list");
 const addButton = content.querySelector(".profile__add-button");
 
 function makeCard(name, link) {
-  const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const delButton = cardElement.querySelector(".card__delete-button");
 
   cardElement.querySelector(".card__title").textContent = name;
   cardElement.querySelector(".card__image").src = link;
+  cardElement.querySelector(".card__image").alt = name;
 
   delButton.addEventListener("click", function () {
     onDelButton(cardElement);
