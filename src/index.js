@@ -1,7 +1,11 @@
+import {initialCards} from './scripts/cards.js';
+import './pages/index.css';
+
 const content = document.querySelector(".content");
 const cardTemplate = document.querySelector("#card-template").content;
 const placesContent = content.querySelector(".places__list");
 const addButton = content.querySelector(".profile__add-button");
+
 
 function makeCard(name, link) {
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
