@@ -4,6 +4,15 @@ import "./pages/index.css";
 const content = document.querySelector(".content");
 const cardTemplate = document.querySelector("#card-template").content;
 const placesContent = content.querySelector(".places__list");
+const editButton = content.querySelector(".profile__edit-button");
+const editPopup = document.querySelector(".popup_type_edit");
+const profileName = document.querySelector(".profile__title");
+const profileDescription = document.querySelector(".profile__description");
+const formElement = document.querySelector(".popup__form");
+const nameInput = document.querySelector(".popup__input_type_name");
+const jobInput = document.querySelector(".popup__input_type_description");
+const closeEditPopup = document.querySelector(".popup__close");
+const contentPopup = document.querySelectorAll(".popup__content");
 
 const imagePopup = document.querySelector(".popup_type_image");
 
@@ -36,20 +45,22 @@ initialCards.forEach((item) => {
   placesContent.append(makeCard(item.name, item.link));
 });
 
-//edit Button
-const editButton = content.querySelector(".profile__edit-button");
-const editPopup = document.querySelector(".popup_type_edit");
+//edit popup
 editButton.addEventListener("click", function () {
-  const profileName = document.querySelector(".profile__title");
-  const profileDescription = document.querySelector(".profile__description");
   editPopup.style.display = "flex";
-  document.querySelector(".popup__input_type_name").placeholder =
-    profileName.innerHTML;
-  document.querySelector(".popup__input_type_description").placeholder =
-    profileDescription.innerHTML;
+  nameInput.value = profileName.innerHTML;
+  jobInput.value = profileDescription.innerHTML;
 });
 
-const closeEditPopup = document.querySelector(".popup__close");
+function handleFormSubmit(evt) {
+    evt.preventDefault(); 
+    profileName.innerHTML = nameInput.value;
+    profileDescription.innerHTML = jobInput.value;
+    editPopup.style.display = "none";
+}
+
+formElement.addEventListener('submit', handleFormSubmit);
+
 closeEditPopup.addEventListener("click", function () {
   editPopup.style.display = "none";
 });
@@ -58,19 +69,16 @@ editPopup.addEventListener("click", function () {
   editPopup.style.display = "none";
 });
 
-const contentPopup = document.querySelectorAll(".popup__content");
 contentPopup.forEach((element) => {
   element.addEventListener("click", function (evt) {
     evt.stopPropagation();
   });
 });
 
-//add Button
+//add popup
 const addButton = content.querySelector(".profile__add-button");
 const addPopup = document.querySelector(".popup_type_new-card");
-const closeAddPopup = document.querySelector(
-  ".popup_type_new-card .popup__close"
-);
+const closeAddPopup = document.querySelector(".popup_type_new-card .popup__close");
 addButton.addEventListener("click", function () {
   addPopup.style.display = "flex";
 });
@@ -91,9 +99,11 @@ document.body.addEventListener("keydown", function (e) {
   }
 });
 
-const closeImagePopup = document.querySelector(
-  ".popup_type_image .popup__close"
-);
+
+
+
+//image popup
+const closeImagePopup = document.querySelector(".popup_type_image .popup__close");
 closeImagePopup.addEventListener("click", function () {
   imagePopup.style.display = "none";
 });
