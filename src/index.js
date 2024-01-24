@@ -32,6 +32,7 @@ function makeCard(name, link) {
     imagePopup.style.display = "flex";
     imagePopup.querySelector(".popup__image").src = link;
     imagePopup.querySelector(".popup__image").alt = name;
+    imagePopup.querySelector(".popup__caption").innerHTML = name;
   });
 
   return cardElement;
