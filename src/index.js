@@ -58,6 +58,13 @@ editPopup.addEventListener("click", function () {
   editPopup.style.display = "none";
 });
 
+const contentPopup = document.querySelectorAll(".popup__content");
+contentPopup.forEach((element) => {
+  element.addEventListener("click", function (evt) {
+    evt.stopPropagation();
+  });
+});
+
 //add Button
 const addButton = content.querySelector(".profile__add-button");
 const addPopup = document.querySelector(".popup_type_new-card");
@@ -84,11 +91,13 @@ document.body.addEventListener("keydown", function (e) {
   }
 });
 
-const closeImagePopup = document.querySelector(".popup_type_image .popup__close");
-closeImagePopup.addEventListener("click", function() {
+const closeImagePopup = document.querySelector(
+  ".popup_type_image .popup__close"
+);
+closeImagePopup.addEventListener("click", function () {
   imagePopup.style.display = "none";
-})
+});
 
-imagePopup.addEventListener("click", function() {
+imagePopup.addEventListener("click", function () {
   imagePopup.style.display = "none";
-})
+});
