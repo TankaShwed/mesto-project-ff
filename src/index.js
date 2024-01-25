@@ -36,7 +36,8 @@ function makeCard(name, link, onLikeButton) {
   });
 
   cardPicture.addEventListener("click", function () {
-    imagePopup.style.display = "flex";
+    imagePopup.classList.add("popup_is-opened");
+    imagePopup.classList.remove("popup_is-animated");
     imagePopup.querySelector(".popup__image").src = link;
     imagePopup.querySelector(".popup__image").alt = name;
     imagePopup.querySelector(".popup__caption").innerHTML = name;
@@ -74,17 +75,20 @@ function handleFormSubmit(evt) {
   evt.preventDefault();
   profileName.innerHTML = nameInput.value;
   profileDescription.innerHTML = jobInput.value;
-  editPopup.style.display = "none";
+  editPopup.classList.add("popup_is-animated");
+  editPopup.classList.remove("popup_is-opened");
 }
 
 formElementEditPopup.addEventListener("submit", handleFormSubmit);
 
 closeEditPopup.addEventListener("click", function () {
-  editPopup.style.display = "none";
+  editPopup.classList.add("popup_is-animated");
+  editPopup.classList.remove("popup_is-opened");
 });
 
 editPopup.addEventListener("click", function () {
-  editPopup.style.display = "none";
+  editPopup.classList.add("popup_is-animated");
+  editPopup.classList.remove("popup_is-opened");
 });
 
 contentPopup.forEach((element) => {
@@ -98,7 +102,8 @@ formElementAddPopup.addEventListener("submit", function (evt) {
   placesContent.prepend(
     makeCard(cardNameInput.value, cardImageInput.value, like)
   );
-  addPopup.style.display = "none";
+  addPopup.classList.add("popup_is-animated");
+  addPopup.classList.remove("popup_is-opened");
   cardNameInput.value = "";
   cardImageInput.value = "";
 });
@@ -110,24 +115,28 @@ const closeAddPopup = document.querySelector(
   ".popup_type_new-card .popup__close"
 );
 addButton.addEventListener("click", function () {
-  addPopup.style.display = "flex";
+  addPopup.classList.add("popup_is-opened");
+  addPopup.classList.remove("popup_is-animated");
 });
 
 closeAddPopup.addEventListener("click", function () {
-  addPopup.style.display = "none";
+  addPopup.classList.add("popup_is-animated");
+  addPopup.classList.remove("popup_is-opened");
 });
 
 addPopup.addEventListener("click", function () {
-  addPopup.style.display = "none";
+  addPopup.classList.add("popup_is-animated");
+  addPopup.classList.remove("popup_is-opened");
 });
 
 document.body.addEventListener("keydown", function (e) {
   if (e.code == "Escape") {
     editPopup.classList.add("popup_is-animated");
     editPopup.classList.remove("popup_is-opened");
-
-    addPopup.style.display = "none";
-    imagePopup.style.display = "none";
+    addPopup.classList.add("popup_is-animated");
+    addPopup.classList.remove("popup_is-opened");
+    imagePopup.classList.add("popup_is-animated");
+    imagePopup.classList.remove("popup_is-opened");
   }
 });
 
@@ -136,9 +145,11 @@ const closeImagePopup = document.querySelector(
   ".popup_type_image .popup__close"
 );
 closeImagePopup.addEventListener("click", function () {
-  imagePopup.style.display = "none";
+  imagePopup.classList.add("popup_is-animated");
+  imagePopup.classList.remove("popup_is-opened");
 });
 
 imagePopup.addEventListener("click", function () {
-  imagePopup.style.display = "none";
+  imagePopup.classList.add("popup_is-animated");
+  imagePopup.classList.remove("popup_is-opened");
 });
