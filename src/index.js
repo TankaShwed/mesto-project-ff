@@ -14,107 +14,110 @@ const nameInput = document.querySelector(".popup__input_type_name");
 const jobInput = document.querySelector(".popup__input_type_description");
 const closeEditPopup = document.querySelector(".popup__close");
 const contentPopup = document.querySelectorAll(".popup__content");
-const formElementAddPopup = document.querySelector(".popup_type_new-card .popup__form");
+const formElementAddPopup = document.querySelector(
+  ".popup_type_new-card .popup__form"
+);
 const cardNameInput = document.querySelector(".popup__input_type_card-name");
 const cardImageInput = document.querySelector(".popup__input_type_url");
 const imagePopup = document.querySelector(".popup_type_image");
-//add popup
 const addButton = content.querySelector(".profile__add-button");
 const addPopup = document.querySelector(".popup_type_new-card");
-const closeAddPopup = document.querySelector(".popup_type_new-card .popup__close");
-//image popup
-const closeImagePopup = document.querySelector(".popup_type_image .popup__close");
-
+const closeAddPopup = document.querySelector(
+  ".popup_type_new-card .popup__close"
+);
+const closeImagePopup = document.querySelector(
+  ".popup_type_image .popup__close"
+);
 
 initialCards.forEach((item) => {
   placesContent.append(makeCard(item.name, item.link, like, imagePopup));
 });
 
-//edit popup
+function closeModal(popup) {
+  popup.classList.add("popup_is-animated");
+  popup.classList.remove("popup_is-opened");
+}
+
+function openModal(popup) {
+  popup.classList.add("popup_is-opened");
+  popup.classList.remove("popup_is-animated");
+}
+
+//Edit Popup
 editButton.addEventListener("click", function () {
   editPopup.style.display = "flex";
   nameInput.value = profileName.innerHTML;
   jobInput.value = profileDescription.innerHTML;
-  editPopup.classList.remove("popup_is-animated");
-  editPopup.classList.add("popup_is-opened");
+  openModal(editPopup);
+});
+
+//close edit poup
+closeEditPopup.addEventListener("click", function () {
+  closeModal(editPopup);
+});
+
+//close edit poup
+editPopup.addEventListener("click", function () {
+  closeModal(editPopup);
 });
 
 formElementEditPopup.addEventListener("submit", handleFormSubmit);
 
-closeEditPopup.addEventListener("click", function () {
-  editPopup.classList.add("popup_is-animated");
-  editPopup.classList.remove("popup_is-opened");
-});
-
-editPopup.addEventListener("click", function () {
-  editPopup.classList.add("popup_is-animated");
-  editPopup.classList.remove("popup_is-opened");
-});
-
-contentPopup.forEach((element) => {  // перенести в модуль?
+contentPopup.forEach((element) => {
+  // перенести в модуль?
   element.addEventListener("click", function (evt) {
     evt.stopPropagation();
   });
 });
 
+//Add Popup
 formElementAddPopup.addEventListener("submit", function (evt) {
   evt.preventDefault();
   placesContent.prepend(
     makeCard(cardNameInput.value, cardImageInput.value, like, imagePopup)
   );
-  addPopup.classList.add("popup_is-animated");
-  addPopup.classList.remove("popup_is-opened");
+  closeModal(addPopup);
   cardNameInput.value = "";
   cardImageInput.value = "";
 });
 
-//add popup
 addButton.addEventListener("click", function () {
-  addPopup.classList.add("popup_is-opened");
-  addPopup.classList.remove("popup_is-animated");
+  openModal(addPopup);
 });
 
-closeAddPopup.addEventListener("click", function () {
-  addPopup.classList.add("popup_is-animated");
-  addPopup.classList.remove("popup_is-opened");
-});
-
+//open add popup
 addPopup.addEventListener("click", function () {
-  addPopup.classList.add("popup_is-animated");
-  addPopup.classList.remove("popup_is-opened");
+  closeModal(addPopup);
 });
 
+//close add popup
+closeAddPopup.addEventListener("click", function () {
+  closeModal(addPopup);
+});
+
+//Image Popup
+imagePopup.addEventListener("click", function () {
+  closeModal(imagePopup);
+});
+
+//close image popup
+closeImagePopup.addEventListener("click", function () {
+  closeModal(imagePopup);
+});
+
+//ESC Close Popup
 document.body.addEventListener("keydown", function (e) { //document body заменить ?
   if (e.code == "Escape") {
-    editPopup.classList.add("popup_is-animated");
-    editPopup.classList.remove("popup_is-opened");
-    addPopup.classList.add("popup_is-animated");
-    addPopup.classList.remove("popup_is-opened");
-    imagePopup.classList.add("popup_is-animated");
-    imagePopup.classList.remove("popup_is-opened");
+    closeModal(editPopup);
+    closeModal(addPopup);
+    closeModal(imagePopup);
   }
 });
 
-//image popup
-closeImagePopup.addEventListener("click", function () {
-  imagePopup.classList.add("popup_is-animated");
-  imagePopup.classList.remove("popup_is-opened");
-});
-
-imagePopup.addEventListener("click", function () {
-  imagePopup.classList.add("popup_is-animated");
-  imagePopup.classList.remove("popup_is-opened");
-});
 
 function handleFormSubmit(evt) {
-    evt.preventDefault();
-    profileName.innerHTML = nameInput.value;
-    profileDescription.innerHTML = jobInput.value;
-    editPopup.classList.add("popup_is-animated");
-    editPopup.classList.remove("popup_is-opened");
-  }
-
-function openModal(){
-  imagePopup.classList.add("popup_is-animated");
-  imagePopup.classList.remove("popup_is-opened");
+  evt.preventDefault();
+  profileName.innerHTML = nameInput.value;
+  profileDescription.innerHTML = jobInput.value;
+  closeModal(editPopup);
 }
