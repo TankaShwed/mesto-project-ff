@@ -1,3 +1,5 @@
+import { openModal } from "./modal.js";
+
 const cardTemplate = document.querySelector("#card-template").content;
 
 export function makeCard(name, link, onLikeButton, imagePopup) {
@@ -11,13 +13,12 @@ export function makeCard(name, link, onLikeButton, imagePopup) {
   cardPicture.alt = name;
 
   delButton.addEventListener("click", function (evt) {
-    onDelButton(cardElement);
+    deleteCard(cardElement);
     evt.stopPropagation();
   });
 
   cardPicture.addEventListener("click", function () {
-    imagePopup.classList.add("popup_is-opened");
-    imagePopup.classList.remove("popup_is-animated");
+    openModal(imagePopup);
     imagePopup.querySelector(".popup__image").src = link;
     imagePopup.querySelector(".popup__image").alt = name;
     imagePopup.querySelector(".popup__caption").innerHTML = name;
@@ -34,6 +35,6 @@ export function like(like) {
   like.classList.toggle("card__like-button_is-active");
 }
 
-export function onDelButton(card) {
+export function deleteCard(card) {
   card.remove();
 }
