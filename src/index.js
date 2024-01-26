@@ -13,14 +13,11 @@ const editButton = content.querySelector(".profile__edit-button");
 const editPopup = document.querySelector(".popup_type_edit");
 const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
-const formElementEditPopup = document.querySelector(".popup__form");
+const formEditProfile = document.querySelector(".popup__form");
 const nameInput = document.querySelector(".popup__input_type_name");
 const jobInput = document.querySelector(".popup__input_type_description");
 const closeEditPopup = document.querySelector(".popup__close");
-const contentPopup = document.querySelectorAll(".popup__content");
-const formElementAddPopup = document.querySelector(
-  ".popup_type_new-card .popup__form"
-);
+const formAddCard = document.querySelector(".popup_type_new-card .popup__form");
 const cardNameInput = document.querySelector(".popup__input_type_card-name");
 const cardImageInput = document.querySelector(".popup__input_type_url");
 const imagePopup = document.querySelector(".popup_type_image");
@@ -54,7 +51,7 @@ closeEditPopup.addEventListener("click", function () {
 //overlay
 editPopup.addEventListener("click", closePopupByOverlay);
 
-formElementEditPopup.addEventListener("submit", handleProfilEditFormSubmit);
+formEditProfile.addEventListener("submit", handleProfilEditFormSubmit);
 
 function handleProfilEditFormSubmit(evt) {
   evt.preventDefault();
@@ -69,8 +66,8 @@ function openImageCard(link, name) {
   imagePopup.querySelector(".popup__caption").textContent = name;
 }
 
-formElementAddPopup.addEventListener("submit", function (evt) {
-evt.preventDefault();
+formAddCard.addEventListener("submit", function (evt) {
+  evt.preventDefault();
   placesContent.prepend(
     makeCard(
       cardNameInput.value,
@@ -81,8 +78,7 @@ evt.preventDefault();
     )
   );
   closeModal(addPopup);
-  cardNameInput.value = "";
-  cardImageInput.value = "";
+  formAddCard.reset();
 });
 
 addButton.addEventListener("click", function () {
