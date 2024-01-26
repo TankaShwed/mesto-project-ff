@@ -14,7 +14,7 @@ export function makeCard(name, link, onLikeButton, imagePopup) {
 
   delButton.addEventListener("click", function (evt) {
     deleteCard(cardElement);
-    evt.stopPropagation();
+    // evt.stopPropagation();
   });
 
   cardPicture.addEventListener("click", function () {
