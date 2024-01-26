@@ -1,8 +1,11 @@
-import { openModal } from "./modal.js";
-
-const cardTemplate = document.querySelector("#card-template").content;
-
-export function makeCard(name, link, onLikeButton, imagePopup) {
+export function makeCard(
+  name,
+  link,
+  onLikeButton,
+  callbackDeleteCard,
+  callbackOpenCard
+) {
+  const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const delButton = cardElement.querySelector(".card__delete-button");
   const likeButton = cardElement.querySelector(".card__like-button");
@@ -13,15 +16,11 @@ export function makeCard(name, link, onLikeButton, imagePopup) {
   cardPicture.alt = name;
 
   delButton.addEventListener("click", function (evt) {
-    deleteCard(cardElement);
-    // evt.stopPropagation();
+    callbackDeleteCard(cardElement);
   });
 
   cardPicture.addEventListener("click", function () {
-    openModal(imagePopup);
-    imagePopup.querySelector(".popup__image").src = link;
-    imagePopup.querySelector(".popup__image").alt = name;
-    imagePopup.querySelector(".popup__caption").innerHTML = name;
+    callbackOpenCard(link, name);
   });
 
   likeButton.addEventListener("click", function () {

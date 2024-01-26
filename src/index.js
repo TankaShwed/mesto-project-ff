@@ -1,6 +1,6 @@
 import { initialCards } from "./scripts/cards.js";
 import "./pages/index.css";
-import { makeCard, like } from "./components/card.js";
+import { makeCard, like, deleteCard } from "./components/card.js";
 import {
   openModal,
   closeModal,
@@ -34,18 +34,10 @@ const closeImagePopup = document.querySelector(
 );
 
 initialCards.forEach((item) => {
-  placesContent.append(makeCard(item.name, item.link, like, imagePopup));
+  placesContent.append(
+    makeCard(item.name, item.link, like, deleteCard, openImageCard)
+  );
 });
-
-// contentPopup.forEach((element) => {
-//   element.addEventListener("click", function (evt) {
-//     evt.stopPropagation();
-//   });
-// });
-
-// editPopup.addEventListener('click', closePopupByOverlay){
-
-// }
 
 //Edit Popup
 editButton.addEventListener("click", function () {
@@ -62,20 +54,31 @@ closeEditPopup.addEventListener("click", function () {
 //overlay
 editPopup.addEventListener("click", closePopupByOverlay);
 
-formElementEditPopup.addEventListener("submit", handleFormSubmit);
+formElementEditPopup.addEventListener("submit", handleProfilEditFormSubmit);
 
-function handleFormSubmit(evt) {
+function handleProfilEditFormSubmit(evt) {
   evt.preventDefault();
   profileName.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
   closeModal(editPopup);
 }
 
-//save new card
+function openImageCard(link, name) {
+  openModal(imagePopup);
+  imagePopup.querySelector(".popup__image").src = link;
+  imagePopup.querySelector(".popup__caption").textContent = name;
+}
+
 formElementAddPopup.addEventListener("submit", function (evt) {
-  evt.preventDefault();
+evt.preventDefault();
   placesContent.prepend(
-    makeCard(cardNameInput.value, cardImageInput.value, like, imagePopup)
+    makeCard(
+      cardNameInput.value,
+      cardImageInput.value,
+      like,
+      deleteCard,
+      openImageCard
+    )
   );
   closeModal(addPopup);
   cardNameInput.value = "";
