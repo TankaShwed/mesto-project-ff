@@ -85,6 +85,10 @@ formAddCard.addEventListener("submit", function (evt) {
 });
 
 addButton.addEventListener("click", function () {
+  formAddCard.reset();
+  hideInputError(formAddCard, cardNameInput);
+  hideInputError(formAddCard, cardImageInput);
+  toggleButtonState([cardNameInput, cardImageInput], formAddCard.querySelector(".popup__button"));
   openModal(addPopup);
 });
 
@@ -136,9 +140,7 @@ const showInputError = (formElement, inputElement, errorMessage) => {
 };
 
 const hideInputError = (formElement, inputElement) => {
-  const selector = `.${inputElement.id}-error`;
-  console.log(selector);
-  const errorElement = formElement.querySelector(selector);
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.remove("popup__input_type_error");
   errorElement.classList.remove("popup__input-error_active");
   errorElement.textContent = "";
@@ -152,6 +154,8 @@ const checkInputValidity = (formElement, inputElement) => {
     } else if (inputElement.validity.patternMismatch) {
       message =
         "Поле может содержать только латинские и кириллические буквы, знаки дефиса и пробелы.";
+    } else if(inputElement.validity.typeMismatch) {
+      message = "Введите адрес сайта."
     }
     showInputError(formElement, inputElement, message);
   } else {
