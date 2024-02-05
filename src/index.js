@@ -6,6 +6,7 @@ import {
   closeModal,
   closePopupByOverlay,
 } from "./components/modal.js";
+import {enableValidation, clearValidation} from "./components/validation.js";
 
 const content = document.querySelector(".content");
 const placesContent = content.querySelector(".places__list");
@@ -29,6 +30,15 @@ const closeAddPopup = document.querySelector(
 const closeImagePopup = document.querySelector(
   ".popup_type_image .popup__close"
 );
+//config
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "button_inactive",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__input-error_active",
+};
 
 initialCards.forEach((item) => {
   placesContent.append(
@@ -40,9 +50,7 @@ initialCards.forEach((item) => {
 editButton.addEventListener("click", function () {
   nameInput.value = profileName.textContent;
   jobInput.value = profileDescription.textContent;
-  checkInputValidity(formEditProfile, nameInput);
-  checkInputValidity(formEditProfile, jobInput);
-  toggleButtonState([nameInput, jobInput], formEditProfile.querySelector(".popup__button"));
+  clearValidation(validationConfig, formEditProfile);
   openModal(editPopup);
 });
 
@@ -86,9 +94,7 @@ formAddCard.addEventListener("submit", function (evt) {
 
 addButton.addEventListener("click", function () {
   formAddCard.reset();
-  hideInputError(formAddCard, cardNameInput);
-  hideInputError(formAddCard, cardImageInput);
-  toggleButtonState([cardNameInput, cardImageInput], formAddCard.querySelector(".popup__button"));
+  clearValidation(validationConfig, formAddCard);
   openModal(addPopup);
 });
 
@@ -109,87 +115,4 @@ closeImagePopup.addEventListener("click", function () {
 });
 
 //validation
-// Функция принимает массив полей
-function hasInvalidInput(inputList) {
-  return inputList.some((inputElement) => {
-    // проходим по этому массиву // Если поле не валидно, колбэк вернёт true
-    // Обход массива прекратится и вся функция
-    // hasInvalidInput вернёт true
-    return !inputElement.validity.valid;
-  });
-}
-
-//// Функция принимает массив полей ввода
-// и элемент кнопки, состояние которой нужно менять
-function toggleButtonState(inputList, buttonElement) {
-  if (hasInvalidInput(inputList)) {
-    // Если есть хотя бы один невалидный инпут
-    buttonElement.classList.add("button_inactive"); // сделай кнопку неактивной
-    buttonElement.setAttribute("disabled", "");
-  } else {
-    buttonElement.classList.remove("button_inactive"); // иначе сделай кнопку активной
-    buttonElement.removeAttribute("disabled");
-  }
-}
-
-const showInputError = (formElement, inputElement, errorMessage) => {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.add("popup__input_type_error");
-  errorElement.textContent = errorMessage;
-  errorElement.classList.add("popup__input-error_active");
-};
-
-const hideInputError = (formElement, inputElement) => {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.remove("popup__input_type_error");
-  errorElement.classList.remove("popup__input-error_active");
-  errorElement.textContent = "";
-};
-
-const checkInputValidity = (formElement, inputElement) => {
-  if (!inputElement.validity.valid) {
-    let message = inputElement.validationMessage;
-    if (inputElement.validity.valueMissing) {
-      message = "Вы пропустили это поле.";
-    } else if (inputElement.validity.patternMismatch) {
-      message =
-        "Поле может содержать только латинские и кириллические буквы, знаки дефиса и пробелы.";
-    } else if(inputElement.validity.typeMismatch) {
-      message = "Введите адрес сайта."
-    }
-    showInputError(formElement, inputElement, message);
-  } else {
-    hideInputError(formElement, inputElement);
-  }
-};
-
-const setEventListeners = (formElement) => {
-  // Найдём все поля формы и сделаем из них массив
-  const inputList = Array.from(formElement.querySelectorAll(".popup__input")); // Найдём в текущей форме кнопку отправки
-  const buttonElement = formElement.querySelector(".popup__button");
-  toggleButtonState(inputList, buttonElement);
-  inputList.forEach((inputElement) => {
-    inputElement.addEventListener("input", function () {
-      checkInputValidity(formElement, inputElement);
-      toggleButtonState(inputList, buttonElement); // Вызовем toggleButtonState и передадим ей массив полей и кнопку
-    });
-  });
-};
-
-const enableValidation = () => {
-  const formList = Array.from(document.querySelectorAll(".popup__form"));
-
-  formList.forEach((formElement) => {
-    formElement.addEventListener("submit", function (evt) {
-      evt.preventDefault();
-    });
-
-    setEventListeners(formElement);
-    // const fieldsetList = Array.from(formElement.querySelectorAll('.form__set'));
-    // fieldsetList.forEach((fieldSet) => {
-    //   setEventListeners(fieldSet);
-    // });
-  });
-};
-
-enableValidation();
+enableValidation(validationConfig);
