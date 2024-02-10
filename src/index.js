@@ -6,12 +6,13 @@ import {
   closeModal,
   closePopupByOverlay,
 } from "./components/modal.js";
-import {enableValidation, clearValidation} from "./components/validation.js";
+import { enableValidation, clearValidation } from "./components/validation.js";
 
 const content = document.querySelector(".content");
 const placesContent = content.querySelector(".places__list");
 const editButton = content.querySelector(".profile__edit-button");
 const editPopup = document.querySelector(".popup_type_edit");
+const imageProfile = document.querySelector(".profile__image");
 const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 const formEditProfile = document.querySelector(".popup__form");
@@ -30,6 +31,7 @@ const closeAddPopup = document.querySelector(
 const closeImagePopup = document.querySelector(
   ".popup_type_image .popup__close"
 );
+
 //config
 const validationConfig = {
   formSelector: ".popup__form",
@@ -39,12 +41,6 @@ const validationConfig = {
   inputErrorClass: "popup__input_type_error",
   errorClass: "popup__input-error_active",
 };
-
-initialCards.forEach((item) => {
-  placesContent.append(
-    makeCard(item.name, item.link, like, deleteCard, openImageCard)
-  );
-});
 
 //Edit Popup
 editButton.addEventListener("click", function () {
@@ -116,3 +112,33 @@ closeImagePopup.addEventListener("click", function () {
 
 //validation
 enableValidation(validationConfig);
+
+// import { getInitialCards } from "./api.js";
+
+
+fetch('https://nomoreparties.co/v1/wff-cohort-5/users/me', {
+  headers: {
+    authorization: 'dd2287e8-e249-46eb-befd-737a64b52f05'
+  }
+})
+  .then(res => res.json())
+  .then((result) => {
+    console.log(result);
+    profileName.textContent = result.name;
+    profileDescription.textContent = result.about;
+    imageProfile.style.backgroundImage = "url('" + result.avatar + "')";
+  });
+
+fetch('https://nomoreparties.co/v1/wff-cohort-5/cards', {
+  headers: {
+    authorization: 'dd2287e8-e249-46eb-befd-737a64b52f05'
+  }
+})
+  .then(res => res.json())
+  .then((result) => {
+    result.forEach((item) => {
+      placesContent.append(
+        makeCard(item.name, item.link, like, deleteCard, openImageCard)
+      );
+    });
+  });
