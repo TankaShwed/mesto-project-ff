@@ -115,30 +115,26 @@ enableValidation(validationConfig);
 
 // import { getInitialCards } from "./api.js";
 
-
-fetch('https://nomoreparties.co/v1/wff-cohort-5/users/me', {
-  headers: {
-    authorization: 'dd2287e8-e249-46eb-befd-737a64b52f05'
-  }
-})
-  .then(res => res.json())
-  .then((result) => {
-    console.log(result);
-    profileName.textContent = result.name;
-    profileDescription.textContent = result.about;
-    imageProfile.style.backgroundImage = "url('" + result.avatar + "')";
+Promise.all([
+  fetch("https://nomoreparties.co/v1/wff-cohort-5/users/me", {
+    headers: {
+      authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
+    },
+  }).then((res) => res.json()),
+  fetch("https://nomoreparties.co/v1/wff-cohort-5/cards", {
+    headers: {
+      authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
+    },
+  }).then((res) => res.json()),
+]).then(function (df) {
+  const user = df[0];
+  const cards = df[1];
+  profileName.textContent = user.name;
+  profileDescription.textContent = user.about;
+  imageProfile.style.backgroundImage = "url('" + user.avatar + "')";
+  cards.forEach((item) => {
+    placesContent.append(
+      makeCard(item, like, deleteCard, openImageCard, user._id)
+    );
   });
-
-fetch('https://nomoreparties.co/v1/wff-cohort-5/cards', {
-  headers: {
-    authorization: 'dd2287e8-e249-46eb-befd-737a64b52f05'
-  }
-})
-  .then(res => res.json())
-  .then((result) => {
-    result.forEach((item) => {
-      placesContent.append(
-        makeCard(item.name, item.link, like, deleteCard, openImageCard)
-      );
-    });
-  });
+});
