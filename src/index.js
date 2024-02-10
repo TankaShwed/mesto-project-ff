@@ -1,12 +1,13 @@
 import { initialCards } from "./scripts/cards.js";
 import "./pages/index.css";
-import { makeCard, like, deleteCard } from "./components/card.js";
+import { makeCard, like, deleteCard, openDeleteCard } from "./components/card.js";
 import {
   openModal,
   closeModal,
   closePopupByOverlay,
 } from "./components/modal.js";
 import { enableValidation, clearValidation } from "./components/validation.js";
+// import { getInitialCards } from "./api.js";
 
 const content = document.querySelector(".content");
 const placesContent = content.querySelector(".places__list");
@@ -31,6 +32,9 @@ const closeAddPopup = document.querySelector(
 const closeImagePopup = document.querySelector(
   ".popup_type_image .popup__close"
 );
+
+const deleteCardPopup = document.querySelector(".popup_type_delete");
+const updateAvatarPopup = document.querySelector(".popup_type_update-avatar");
 
 //config
 const validationConfig = {
@@ -90,17 +94,10 @@ formAddCard.addEventListener("submit", function (evt) {
     name: cardNameInput.value,
     link: cardImageInput.value,
     likes: [],
-    owner: {}
-  }
+    owner: {},
+  };
   evt.preventDefault();
-  placesContent.prepend(
-    makeCard(
-      card,
-      like,
-      deleteCard,
-      openImageCard
-    )
-  );
+  placesContent.prepend(makeCard(card, like, openDeleteCard, openImageCard));
   closeModal(addPopup);
   formAddCard.reset();
 
@@ -123,7 +120,6 @@ addButton.addEventListener("click", function () {
 //close add popup overlay
 addPopup.addEventListener("click", closePopupByOverlay);
 
-//close add popup
 closeAddPopup.addEventListener("click", function () {
   closeModal(addPopup);
 });
@@ -131,15 +127,25 @@ closeAddPopup.addEventListener("click", function () {
 //Image Popup overlay
 imagePopup.addEventListener("click", closePopupByOverlay);
 
-//close image popup
 closeImagePopup.addEventListener("click", function () {
   closeModal(imagePopup);
 });
 
+//close delete popup overlay
+deleteCardPopup.addEventListener("click", closePopupByOverlay);
+
+deleteCardPopup.addEventListener("click", function () {
+  closeModal(deleteCardPopup);
+});
+
+deleteCardPopup.addEventListener("click", function (evt) {
+  const id = deleteCardPopup.dataset.cardid;
+  const card = document.querySelector("[data-cardid='"+id+"']");
+  deleteCard(card, id);
+});
+
 //validation
 enableValidation(validationConfig);
-
-// import { getInitialCards } from "./api.js";
 
 Promise.all([
   fetch("https://nomoreparties.co/v1/wff-cohort-5/users/me", {
@@ -155,13 +161,13 @@ Promise.all([
 ]).then(function (df) {
   const user = df[0];
   const cards = df[1];
-  console.log(user,cards);
+  console.log(user, cards);
   profileName.textContent = user.name;
   profileDescription.textContent = user.about;
   imageProfile.style.backgroundImage = "url('" + user.avatar + "')";
   cards.forEach((item) => {
     placesContent.append(
-      makeCard(item, like, deleteCard, openImageCard, user._id)
+      makeCard(item, like, openDeleteCard, openImageCard, user._id)
     );
   });
 });

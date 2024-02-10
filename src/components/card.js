@@ -1,3 +1,5 @@
+import { openModal } from "./modal.js";
+
 export function makeCard(
   data,
   onLikeButton,
@@ -15,8 +17,9 @@ export function makeCard(
   cardElement.querySelector(".card__title").textContent = data.name;
   cardPicture.src = data.link;
   cardPicture.alt = data.name;
+  cardElement.setAttribute('data-cardid', data._id);
   likesCount.textContent = data.likes.length;
-  const likeit = data.likes.some((item)=>{
+  const likeit = data.likes.some((item) => {
     return item._id == profileID;
   });
   if (likeit) {
@@ -24,11 +27,11 @@ export function makeCard(
   }
 
   if (data.owner._id !== profileID) {
-    delButton.style.display = 'none';
+    delButton.style.display = "none";
   }
 
-  delButton.addEventListener("click", function (evt) {
-    callbackDeleteCard(cardElement, data._id);
+  delButton.addEventListener("click", function () {
+    callbackDeleteCard(data._id);
   });
 
   cardPicture.addEventListener("click", function () {
@@ -55,3 +58,9 @@ export function deleteCard(card, id) {
     },
   });
 }
+
+export function openDeleteCard(id) {
+  const popupDeleteCard = document.querySelector('.popup_type_delete');
+  popupDeleteCard.setAttribute('data-cardid', id);
+  openModal(popupDeleteCard);
+};
