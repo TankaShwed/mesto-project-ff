@@ -42,7 +42,7 @@ const validationConfig = {
   errorClass: "popup__input-error_active",
 };
 
-//Edit Popup
+//Edit Profile
 editButton.addEventListener("click", function () {
   nameInput.value = profileName.textContent;
   jobInput.value = profileDescription.textContent;
@@ -50,21 +50,32 @@ editButton.addEventListener("click", function () {
   openModal(editPopup);
 });
 
-//close edit poup
 closeEditPopup.addEventListener("click", function () {
   closeModal(editPopup);
 });
 
-//overlay
 editPopup.addEventListener("click", closePopupByOverlay);
 
 formEditProfile.addEventListener("submit", handleProfilEditFormSubmit);
 
+//edit profile save
 function handleProfilEditFormSubmit(evt) {
   evt.preventDefault();
   profileName.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
   closeModal(editPopup);
+
+  fetch("https://nomoreparties.co/v1/wff-cohort-5/users/me", {
+    method: "PATCH",
+    headers: {
+      authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: nameInput.value,
+      about: jobInput.value,
+    }),
+  });
 }
 
 function openImageCard(link, name) {
@@ -73,12 +84,18 @@ function openImageCard(link, name) {
   imagePopup.querySelector(".popup__caption").textContent = name;
 }
 
+//Add New Card
 formAddCard.addEventListener("submit", function (evt) {
+  const card = {
+    name: cardNameInput.value,
+    link: cardImageInput.value,
+    likes: [],
+    owner: {}
+  }
   evt.preventDefault();
   placesContent.prepend(
     makeCard(
-      cardNameInput.value,
-      cardImageInput.value,
+      card,
       like,
       deleteCard,
       openImageCard
@@ -86,6 +103,15 @@ formAddCard.addEventListener("submit", function (evt) {
   );
   closeModal(addPopup);
   formAddCard.reset();
+
+  fetch("https://nomoreparties.co/v1/wff-cohort-5/cards", {
+    method: "POST",
+    headers: {
+      authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(card),
+  });
 });
 
 addButton.addEventListener("click", function () {
@@ -129,6 +155,7 @@ Promise.all([
 ]).then(function (df) {
   const user = df[0];
   const cards = df[1];
+  console.log(user,cards);
   profileName.textContent = user.name;
   profileDescription.textContent = user.about;
   imageProfile.style.backgroundImage = "url('" + user.avatar + "')";

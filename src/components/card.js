@@ -23,8 +23,12 @@ export function makeCard(
     likeButton.classList.add("card__like-button_is-active");
   }
 
+  if (data.owner._id !== profileID) {
+    delButton.style.display = 'none';
+  }
+
   delButton.addEventListener("click", function (evt) {
-    callbackDeleteCard(cardElement);
+    callbackDeleteCard(cardElement, data._id);
   });
 
   cardPicture.addEventListener("click", function () {
@@ -42,6 +46,12 @@ export function like(like) {
   like.classList.toggle("card__like-button_is-active");
 }
 
-export function deleteCard(card) {
+export function deleteCard(card, id) {
   card.remove();
+  fetch("https://nomoreparties.co/v1/wff-cohort-5/cards/" + id, {
+    method: "DELETE",
+    headers: {
+      authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
+    },
+  });
 }
