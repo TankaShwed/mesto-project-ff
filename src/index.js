@@ -180,7 +180,8 @@ formUpdateAvatarPopup.addEventListener("submit", function () {
   formUpdateAvatarPopup.querySelector(".popup__button").textContent =
     "Сохранение...";
   updateAvatar(updateAvatarInput.value)
-    .then(() => {
+    .then((res) => {
+      imageProfile.style.backgroundImage = "url('" + res.avatar + "')";
       closeModal(updateAvatarPopup);
       updateAvatarPopup.querySelector(".popup__button").textContent =
         "Сохранить";
