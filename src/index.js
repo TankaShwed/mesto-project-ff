@@ -198,7 +198,6 @@ Promise.all([getUser(), getInitialCards()])
   .then(function (df) {
     const user = df[0];
     const cards = df[1];
-    console.log(user, cards);
     profileName.textContent = user.name;
     profileDescription.textContent = user.about;
     imageProfile.style.backgroundImage = "url('" + user.avatar + "')";
