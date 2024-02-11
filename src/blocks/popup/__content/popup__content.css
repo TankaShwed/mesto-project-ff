@@ -17,7 +17,3 @@
     padding: 30px 20px;
   }
 }
-
-.popup_type_delete-card .popup__content{
-  min-height: 0px;
-}

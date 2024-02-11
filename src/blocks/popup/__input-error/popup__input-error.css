@@ -4,8 +4,6 @@
   color: #FF0000;
   border: 0;
   font-size: 12px;
-  /* line-height: 18px; */
-  /* box-sizing: border-box; */
-  padding: 8px 0 0;  /*узнать размер верха*/
+  padding: 8px 0 0; 
   margin-bottom: 10px;
 }

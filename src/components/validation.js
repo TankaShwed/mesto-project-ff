@@ -38,7 +38,7 @@ const checkInputValidity = (config, formElement, inputElement) => {
   }
 };
 
-export function setEventListeners(config, formElement) {
+function setEventListeners(config, formElement) {
   // Найдём все поля формы и сделаем из них массив
   const inputList = Array.from(
     formElement.querySelectorAll(config.inputSelector)
@@ -77,7 +77,7 @@ export function clearValidation(config, form) {
 }
 
 // Функция принимает массив полей ввода и элемент кнопки, состояние которой нужно менять
-export function toggleButtonState(config, inputList, buttonElement) {
+function toggleButtonState(config, inputList, buttonElement) {
   if (hasInvalidInput(inputList)) {
     // Если есть хотя бы один невалидный инпут
     buttonElement.classList.add(config.inactiveButtonClass); // сделай кнопку неактивной

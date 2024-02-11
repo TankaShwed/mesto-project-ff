@@ -88,12 +88,10 @@ formEditProfile.addEventListener("submit", handleProfilEditFormSubmit);
 //edit profile save
 function handleProfilEditFormSubmit(evt) {
   evt.preventDefault();
-  profileName.textContent = nameInput.value;
-  profileDescription.textContent = jobInput.value;
-  closeModal(editPopup);
   editPopup.querySelector(".popup__button").textContent = "Сохранение...";
   updateProfile(nameInput.value, jobInput.value)
-    .then(() => {
+    .then((res) => {
+      updateProfileView(res);
       closeModal(editPopup);
       editPopup.querySelector(".popup__button").textContent = "Сохранить";
     })
@@ -181,7 +179,7 @@ formUpdateAvatarPopup.addEventListener("submit", function () {
     "Сохранение...";
   updateAvatar(updateAvatarInput.value)
     .then((res) => {
-      imageProfile.style.backgroundImage = "url('" + res.avatar + "')";
+      updateProfileView(res);
       closeModal(updateAvatarPopup);
       updateAvatarPopup.querySelector(".popup__button").textContent =
         "Сохранить";
@@ -198,9 +196,7 @@ Promise.all([getUser(), getInitialCards()])
   .then(function (arg) {
     const user = arg[0];
     const cards = arg[1];
-    profileName.textContent = user.name;
-    profileDescription.textContent = user.about;
-    imageProfile.style.backgroundImage = "url('" + user.avatar + "')";
+    updateProfileView(user);
     cards.forEach((item) => {
       placesContent.append(
         makeCard(item, like, openDeleteCard, openImageCard, user._id)
@@ -210,3 +206,10 @@ Promise.all([getUser(), getInitialCards()])
   .catch((err) => {
     console.log(err); // выводим ошибку в консоль
   });
+
+function updateProfileView(user) {
+  profileName.textContent = user.name;
+  profileDescription.textContent = user.about;
+  imageProfile.style.backgroundImage = "url('" + user.avatar + "')";
+}
+
