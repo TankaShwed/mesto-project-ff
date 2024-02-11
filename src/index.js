@@ -93,10 +93,12 @@ function handleProfilEditFormSubmit(evt) {
     .then((res) => {
       updateProfileView(res);
       closeModal(editPopup);
-      editPopup.querySelector(".popup__button").textContent = "Сохранить";
     })
     .catch((err) => {
       console.log(err); // выводим ошибку в консоль
+    })
+    .finally(() => {
+      editPopup.querySelector(".popup__button").textContent = "Сохранить";
     });
 }
 
@@ -118,13 +120,15 @@ formAddCard.addEventListener("submit", function (evt) {
     .then((res) => {
       closeModal(addPopup);
       formAddCard.reset();
-      formAddCard.querySelector(".popup__button").textContent = "Сохранить";
       placesContent.prepend(
         makeCard(res, like, openDeleteCard, openImageCard, res.owner._id)
       );
     })
     .catch((err) => {
       console.log(err); // выводим ошибку в консоль
+    })
+    .finally(() => {
+      formAddCard.querySelector(".popup__button").textContent = "Сохранить";
     });
 });
 
@@ -181,11 +185,13 @@ formUpdateAvatarPopup.addEventListener("submit", function () {
     .then((res) => {
       updateProfileView(res);
       closeModal(updateAvatarPopup);
-      updateAvatarPopup.querySelector(".popup__button").textContent =
-        "Сохранить";
     })
     .catch((err) => {
       console.log(err); // выводим ошибку в консоль
+    })
+    .finally(() => {
+      updateAvatarPopup.querySelector(".popup__button").textContent =
+      "Сохранить";
     });
 });
 
@@ -212,4 +218,3 @@ function updateProfileView(user) {
   profileDescription.textContent = user.about;
   imageProfile.style.backgroundImage = "url('" + user.avatar + "')";
 }
-
