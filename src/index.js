@@ -1,6 +1,11 @@
 import { initialCards } from "./scripts/cards.js";
 import "./pages/index.css";
-import { makeCard, like, deleteCard, openDeleteCard } from "./components/card.js";
+import {
+  makeCard,
+  like,
+  deleteCard,
+  openDeleteCard,
+} from "./components/card.js";
 import {
   openModal,
   closeModal,
@@ -35,6 +40,15 @@ const closeImagePopup = document.querySelector(
 
 const deleteCardPopup = document.querySelector(".popup_type_delete");
 const updateAvatarPopup = document.querySelector(".popup_type_update-avatar");
+const closeUpdateAvatarPopup = document.querySelector(
+  ".popup_type_update-avatar .popup__close"
+);
+const formUpdateAvatarPopup = document.querySelector(
+  ".popup_type_update-avatar .popup__form"
+);
+const updateAvatarInput = document.querySelector(
+  ".popup_type_update-avatar .popup__input_type_url"
+);
 
 //config
 const validationConfig = {
@@ -69,17 +83,22 @@ function handleProfilEditFormSubmit(evt) {
   profileDescription.textContent = jobInput.value;
   closeModal(editPopup);
 
-  fetch("https://nomoreparties.co/v1/wff-cohort-5/users/me", {
-    method: "PATCH",
-    headers: {
-      authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: nameInput.value,
-      about: jobInput.value,
-    }),
-  });
+  editPopup.querySelector(".popup__button").textContent = "Сохранение...";
+  
+  // fetch("https://nomoreparties.co/v1/wff-cohort-5/users/me", {
+//   method: "PATCH",
+//   headers: {
+//     authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
+//     "Content-Type": "application/json",
+//   },
+//   body: JSON.stringify({
+//     name: nameInput.value,
+//     about: jobInput.value,
+//   }),
+// }).then(() => {
+//   closeModal(editPopup);
+//   editPopup.querySelector(".popup__button").textContent = "Сохранить";
+// });
 }
 
 function openImageCard(link, name) {
@@ -98,9 +117,8 @@ formAddCard.addEventListener("submit", function (evt) {
   };
   evt.preventDefault();
   placesContent.prepend(makeCard(card, like, openDeleteCard, openImageCard));
-  closeModal(addPopup);
-  formAddCard.reset();
 
+  formAddCard.querySelector(".popup__button").textContent = "Сохранение...";
   fetch("https://nomoreparties.co/v1/wff-cohort-5/cards", {
     method: "POST",
     headers: {
@@ -108,6 +126,10 @@ formAddCard.addEventListener("submit", function (evt) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(card),
+  }).then(() => {
+    closeModal(addPopup);
+    formAddCard.reset();
+    formAddCard.querySelector(".popup__button").textContent = "Сохранить";
   });
 });
 
@@ -140,8 +162,41 @@ deleteCardPopup.addEventListener("click", function () {
 
 deleteCardPopup.addEventListener("click", function (evt) {
   const id = deleteCardPopup.dataset.cardid;
-  const card = document.querySelector("[data-cardid='"+id+"']");
+  const card = document.querySelector("[data-cardid='" + id + "']");
   deleteCard(card, id);
+});
+
+//change avatar
+imageProfile.addEventListener("click", function () {
+  openModal(updateAvatarPopup);
+});
+
+closeUpdateAvatarPopup.addEventListener("click", function () {
+  closeModal(updateAvatarPopup);
+});
+
+updateAvatarPopup.addEventListener("click", closePopupByOverlay);
+
+formUpdateAvatarPopup.addEventListener("submit", function () {
+  formUpdateAvatarPopup.querySelector(".popup__button").textContent =
+    "Сохранение...";
+
+  fetch("https://nomoreparties.co/v1/wff-cohort-5/users/me/avatar", {
+    method: "PATCH",
+    headers: {
+      authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      avatar: updateAvatarInput.value,
+    }),
+  })
+    .then((res) => res.json())
+    .then(() => {
+      closeModal(updateAvatarPopup);
+      updateAvatarPopup.querySelector(".popup__button").textContent =
+        "Сохранить";
+    });
 });
 
 //validation
