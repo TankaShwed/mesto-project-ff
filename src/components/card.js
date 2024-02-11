@@ -34,7 +34,7 @@ export function makeCard(
 
   if (data.owner._id !== profileID) {
     delButton.remove();
-  } 
+  }
 
   cardPicture.addEventListener("click", function () {
     callbackOpenCard(data.link, data.name);
@@ -70,8 +70,13 @@ export function like(like, id, likesCount) {
 }
 
 export function deleteCard(card, id) {
-  card.remove();
-  return deleteMyCard(id);
+  return deleteMyCard(id)
+    .then(() => {
+      card.remove();
+    })
+    .catch((err) => {
+      console.log(err); // выводим ошибку в консоль
+    });
 }
 
 export function openDeleteCard(id) {

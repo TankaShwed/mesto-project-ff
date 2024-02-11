@@ -25,10 +25,9 @@ const checkInputValidity = (config, formElement, inputElement) => {
   if (!inputElement.validity.valid) {
     let message = inputElement.validationMessage;
     if (inputElement.validity.valueMissing) {
-      message = "Вы пропустили это поле.";
+      message = "Вы пропустили это поле."; 
     } else if (inputElement.validity.patternMismatch) {
-      message =
-        "Поле может содержать только латинские и кириллические буквы, знаки дефиса и пробелы.";
+      message = inputElement.dataset.errorMessage;
     } else if (inputElement.validity.typeMismatch) {
       message = "Введите адрес сайта.";
     }
