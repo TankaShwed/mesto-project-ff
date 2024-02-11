@@ -1,4 +1,3 @@
-import { initialCards } from "./scripts/cards.js";
 import "./pages/index.css";
 import {
   makeCard,
@@ -12,7 +11,13 @@ import {
   closePopupByOverlay,
 } from "./components/modal.js";
 import { enableValidation, clearValidation } from "./components/validation.js";
-// import { getInitialCards } from "./api.js";
+import {
+  getUser,
+  getInitialCards,
+  addNewCard,
+  updateProfile,
+  updateAvatar,
+} from "./components/api.js";
 
 const content = document.querySelector(".content");
 const placesContent = content.querySelector(".places__list");
@@ -37,8 +42,13 @@ const closeAddPopup = document.querySelector(
 const closeImagePopup = document.querySelector(
   ".popup_type_image .popup__close"
 );
-
-const deleteCardPopup = document.querySelector(".popup_type_delete");
+const deleteCardPopup = document.querySelector(".popup_type_delete-card");
+const formDeleteCardPopup = document.querySelector(
+  ".popup_type_delete-card .popup__form"
+);
+const closeDeleteCardPopup = document.querySelector(
+  ".popup_type_delete-card .popup__close"
+);
 const updateAvatarPopup = document.querySelector(".popup_type_update-avatar");
 const closeUpdateAvatarPopup = document.querySelector(
   ".popup_type_update-avatar .popup__close"
@@ -49,7 +59,6 @@ const formUpdateAvatarPopup = document.querySelector(
 const updateAvatarInput = document.querySelector(
   ".popup_type_update-avatar .popup__input_type_url"
 );
-
 //config
 const validationConfig = {
   formSelector: ".popup__form",
@@ -82,23 +91,11 @@ function handleProfilEditFormSubmit(evt) {
   profileName.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
   closeModal(editPopup);
-
   editPopup.querySelector(".popup__button").textContent = "Сохранение...";
-  
-  // fetch("https://nomoreparties.co/v1/wff-cohort-5/users/me", {
-//   method: "PATCH",
-//   headers: {
-//     authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
-//     "Content-Type": "application/json",
-//   },
-//   body: JSON.stringify({
-//     name: nameInput.value,
-//     about: jobInput.value,
-//   }),
-// }).then(() => {
-//   closeModal(editPopup);
-//   editPopup.querySelector(".popup__button").textContent = "Сохранить";
-// });
+  updateProfile(nameInput.value, jobInput.value).then(() => {
+    closeModal(editPopup);
+    editPopup.querySelector(".popup__button").textContent = "Сохранить";
+  });
 }
 
 function openImageCard(link, name) {
@@ -119,14 +116,7 @@ formAddCard.addEventListener("submit", function (evt) {
   placesContent.prepend(makeCard(card, like, openDeleteCard, openImageCard));
 
   formAddCard.querySelector(".popup__button").textContent = "Сохранение...";
-  fetch("https://nomoreparties.co/v1/wff-cohort-5/cards", {
-    method: "POST",
-    headers: {
-      authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(card),
-  }).then(() => {
+  addNewCard(card).then(() => {
     closeModal(addPopup);
     formAddCard.reset();
     formAddCard.querySelector(".popup__button").textContent = "Сохранить";
@@ -153,20 +143,23 @@ closeImagePopup.addEventListener("click", function () {
   closeModal(imagePopup);
 });
 
-//close delete popup overlay
+//Delete card
 deleteCardPopup.addEventListener("click", closePopupByOverlay);
 
-deleteCardPopup.addEventListener("click", function () {
+closeDeleteCardPopup.addEventListener("click", function () {
   closeModal(deleteCardPopup);
 });
 
-deleteCardPopup.addEventListener("click", function (evt) {
+formDeleteCardPopup.addEventListener("submit", function () {
   const id = deleteCardPopup.dataset.cardid;
   const card = document.querySelector("[data-cardid='" + id + "']");
-  deleteCard(card, id);
+  deleteCard(card, id)
+  .then(() => {
+    closeModal(deleteCardPopup);
+  });
 });
 
-//change avatar
+//Change avatar
 imageProfile.addEventListener("click", function () {
   openModal(updateAvatarPopup);
 });
@@ -180,17 +173,7 @@ updateAvatarPopup.addEventListener("click", closePopupByOverlay);
 formUpdateAvatarPopup.addEventListener("submit", function () {
   formUpdateAvatarPopup.querySelector(".popup__button").textContent =
     "Сохранение...";
-
-  fetch("https://nomoreparties.co/v1/wff-cohort-5/users/me/avatar", {
-    method: "PATCH",
-    headers: {
-      authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      avatar: updateAvatarInput.value,
-    }),
-  })
+  updateAvatar(updateAvatarInput.value)
     .then((res) => res.json())
     .then(() => {
       closeModal(updateAvatarPopup);
@@ -203,16 +186,8 @@ formUpdateAvatarPopup.addEventListener("submit", function () {
 enableValidation(validationConfig);
 
 Promise.all([
-  fetch("https://nomoreparties.co/v1/wff-cohort-5/users/me", {
-    headers: {
-      authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
-    },
-  }).then((res) => res.json()),
-  fetch("https://nomoreparties.co/v1/wff-cohort-5/cards", {
-    headers: {
-      authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
-    },
-  }).then((res) => res.json()),
+  getUser(),
+  getInitialCards(),
 ]).then(function (df) {
   const user = df[0];
   const cards = df[1];

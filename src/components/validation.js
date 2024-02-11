@@ -64,7 +64,6 @@ export function enableValidation(config) {
   });
 }
 
-// очищает ошибки валидации формы и делает кнопку неактивной //config заменить на validationConfig??
 export function clearValidation(config, form) {
   const inputMas = Array.from(form.querySelectorAll(config.inputSelector));
   inputMas.forEach((element) => {
@@ -77,8 +76,7 @@ export function clearValidation(config, form) {
   );
 }
 
-// Функция принимает массив полей ввода
-// и элемент кнопки, состояние которой нужно менять
+// Функция принимает массив полей ввода и элемент кнопки, состояние которой нужно менять
 export function toggleButtonState(config, inputList, buttonElement) {
   if (hasInvalidInput(inputList)) {
     // Если есть хотя бы один невалидный инпут

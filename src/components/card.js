@@ -1,4 +1,5 @@
 import { openModal } from "./modal.js";
+import { likeCard, dislikeCard, deleteMyCard } from "./api.js";
 
 export function makeCard(
   data,
@@ -49,25 +50,13 @@ export function makeCard(
 export function like(like, id, likesCount) {
   like.classList.toggle("card__like-button_is-active");
   if (like.classList.contains("card__like-button_is-active")) {
-    fetch("https://nomoreparties.co/v1/wff-cohort-5/cards/likes/" + id, {
-      method: "PUT",
-      headers: {
-        authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
-      },
-    })
-      .then((res) => res.json())
+    likeCard(id).then((res) => res.json())
       .then((result) => {
         console.log(result);
         likesCount.textContent = result.likes.length;
       });
   } else {
-    fetch("https://nomoreparties.co/v1/wff-cohort-5/cards/likes/" + id, {
-      method: "DELETE",
-      headers: {
-        authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
-      },
-    })
-      .then((res) => res.json())
+    dislikeCard(id).then((res) => res.json())
       .then((result) => {
         console.log(result);
         likesCount.textContent = result.likes.length;
@@ -77,16 +66,11 @@ export function like(like, id, likesCount) {
 
 export function deleteCard(card, id) {
   card.remove();
-  fetch("https://nomoreparties.co/v1/wff-cohort-5/cards/" + id, {
-    method: "DELETE",
-    headers: {
-      authorization: "dd2287e8-e249-46eb-befd-737a64b52f05",
-    },
-  });
+  return deleteMyCard(id);
 }
 
 export function openDeleteCard(id) {
-  const popupDeleteCard = document.querySelector(".popup_type_delete");
+  const popupDeleteCard = document.querySelector(".popup_type_delete-card");
   popupDeleteCard.setAttribute("data-cardid", id);
   openModal(popupDeleteCard);
 }
