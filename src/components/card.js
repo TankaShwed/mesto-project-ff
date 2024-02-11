@@ -52,7 +52,6 @@ export function like(like, id, likesCount) {
   if (like.classList.contains("card__like-button_is-active")) {
     likeCard(id)
       .then((result) => {
-        console.log(result);
         likesCount.textContent = result.likes.length;
       })
       .catch((err) => {
@@ -61,7 +60,6 @@ export function like(like, id, likesCount) {
   } else {
     dislikeCard(id)
       .then((result) => {
-        console.log(result);
         likesCount.textContent = result.likes.length;
       })
       .catch((err) => {

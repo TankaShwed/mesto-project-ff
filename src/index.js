@@ -195,9 +195,9 @@ formUpdateAvatarPopup.addEventListener("submit", function () {
 enableValidation(validationConfig);
 
 Promise.all([getUser(), getInitialCards()])
-  .then(function (df) {
-    const user = df[0];
-    const cards = df[1];
+  .then(function (arg) {
+    const user = arg[0];
+    const cards = arg[1];
     profileName.textContent = user.name;
     profileDescription.textContent = user.about;
     imageProfile.style.backgroundImage = "url('" + user.avatar + "')";

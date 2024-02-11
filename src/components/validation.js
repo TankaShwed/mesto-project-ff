@@ -1,42 +1,42 @@
 // Функция принимает массив полей
 function hasInvalidInput(inputList) {
-    return inputList.some((inputElement) => {
-      // проходим по этому массиву, если поле не валидно, колбэк вернёт true, обход массива прекратится 
-      // и вся функция hasInvalidInput вернёт true
-      return !inputElement.validity.valid;
-    });
-  }
-  
-  const showInputError = (config, formElement, inputElement, errorMessage) => {
-    const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.add(config.inputErrorClass);
-    errorElement.textContent = errorMessage;
-    errorElement.classList.add(config.errorClass);
-  };
-  
-  const hideInputError = (config, formElement, inputElement) => {
-    const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.remove(config.inputErrorClass);
-    errorElement.classList.remove(config.errorClass);
-    errorElement.textContent = "";
-  };
-  
-  const checkInputValidity = (config, formElement, inputElement) => {
-    if (!inputElement.validity.valid) {
-      let message = inputElement.validationMessage;
-      if (inputElement.validity.valueMissing) {
-        message = "Вы пропустили это поле.";
-      } else if (inputElement.validity.patternMismatch) {
-        message =
-          "Поле может содержать только латинские и кириллические буквы, знаки дефиса и пробелы.";
-      } else if (inputElement.validity.typeMismatch) {
-        message = "Введите адрес сайта.";
-      }
-      showInputError(config, formElement, inputElement, message);
-    } else {
-      hideInputError(config, formElement, inputElement);
+  return inputList.some((inputElement) => {
+    // проходим по этому массиву, если поле не валидно, колбэк вернёт true, обход массива прекратится
+    // и вся функция hasInvalidInput вернёт true
+    return !inputElement.validity.valid;
+  });
+}
+
+const showInputError = (config, formElement, inputElement, errorMessage) => {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  inputElement.classList.add(config.inputErrorClass);
+  errorElement.textContent = errorMessage;
+  errorElement.classList.add(config.errorClass);
+};
+
+const hideInputError = (config, formElement, inputElement) => {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  inputElement.classList.remove(config.inputErrorClass);
+  errorElement.classList.remove(config.errorClass);
+  errorElement.textContent = "";
+};
+
+const checkInputValidity = (config, formElement, inputElement) => {
+  if (!inputElement.validity.valid) {
+    let message = inputElement.validationMessage;
+    if (inputElement.validity.valueMissing) {
+      message = "Вы пропустили это поле.";
+    } else if (inputElement.validity.patternMismatch) {
+      message =
+        "Поле может содержать только латинские и кириллические буквы, знаки дефиса и пробелы.";
+    } else if (inputElement.validity.typeMismatch) {
+      message = "Введите адрес сайта.";
     }
-  };
+    showInputError(config, formElement, inputElement, message);
+  } else {
+    hideInputError(config, formElement, inputElement);
+  }
+};
 
 export function setEventListeners(config, formElement) {
   // Найдём все поля формы и сделаем из них массив

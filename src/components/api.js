@@ -6,28 +6,23 @@ const config = {
   },
 };
 
+function hendleAPIResponse(res) {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`);
+}
+
 export const getUser = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    // если ошибка, отклоняем промис
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(hendleAPIResponse);
 };
 
 export const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    // если ошибка, отклоняем промис
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(hendleAPIResponse);
 };
 
 export const addNewCard = (card) => {
@@ -35,13 +30,7 @@ export const addNewCard = (card) => {
     headers: config.headers,
     method: "POST",
     body: JSON.stringify(card),
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    // если ошибка, отклоняем промис
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(hendleAPIResponse);
 };
 
 export const updateProfile = (name, about) => {
@@ -52,13 +41,7 @@ export const updateProfile = (name, about) => {
       name: name,
       about: about,
     }),
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    // если ошибка, отклоняем промис
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(hendleAPIResponse);
 };
 
 export const updateAvatar = (avatar) => {
@@ -68,39 +51,21 @@ export const updateAvatar = (avatar) => {
     body: JSON.stringify({
       avatar: avatar,
     }),
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    // если ошибка, отклоняем промис
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(hendleAPIResponse);
 };
 
 export const likeCard = (id) => {
   return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     headers: config.headers,
     method: "PUT",
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    // если ошибка, отклоняем промис
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(hendleAPIResponse);
 };
 
 export const dislikeCard = (id) => {
   return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     headers: config.headers,
     method: "DELETE",
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    // если ошибка, отклоняем промис
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(hendleAPIResponse);
 };
 
 export const deleteMyCard = (id) => {
