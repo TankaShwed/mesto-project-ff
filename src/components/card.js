@@ -28,13 +28,13 @@ export function makeCard(
     likeButton.classList.add("card__like-button_is-active");
   }
 
-  if (data.owner._id !== profileID) {
-    delButton.style.display = "none";
-  }
-
   delButton.addEventListener("click", function () {
     callbackDeleteCard(data._id);
   });
+
+  if (data.owner._id !== profileID) {
+    delButton.remove();
+  } 
 
   cardPicture.addEventListener("click", function () {
     callbackOpenCard(data.link, data.name);
@@ -48,11 +48,11 @@ export function makeCard(
 }
 
 export function like(like, id, likesCount) {
-  like.classList.toggle("card__like-button_is-active");
-  if (like.classList.contains("card__like-button_is-active")) {
+  if (!like.classList.contains("card__like-button_is-active")) {
     likeCard(id)
       .then((result) => {
         likesCount.textContent = result.likes.length;
+        like.classList.add("card__like-button_is-active");
       })
       .catch((err) => {
         console.log(err); // выводим ошибку в консоль
@@ -61,6 +61,7 @@ export function like(like, id, likesCount) {
     dislikeCard(id)
       .then((result) => {
         likesCount.textContent = result.likes.length;
+        like.classList.remove("card__like-button_is-active");
       })
       .catch((err) => {
         console.log(err); // выводим ошибку в консоль
