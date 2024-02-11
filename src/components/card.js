@@ -50,16 +50,22 @@ export function makeCard(
 export function like(like, id, likesCount) {
   like.classList.toggle("card__like-button_is-active");
   if (like.classList.contains("card__like-button_is-active")) {
-    likeCard(id).then((res) => res.json())
+    likeCard(id)
       .then((result) => {
         console.log(result);
         likesCount.textContent = result.likes.length;
+      })
+      .catch((err) => {
+        console.log(err); // выводим ошибку в консоль
       });
   } else {
-    dislikeCard(id).then((res) => res.json())
+    dislikeCard(id)
       .then((result) => {
         console.log(result);
         likesCount.textContent = result.likes.length;
+      })
+      .catch((err) => {
+        console.log(err); // выводим ошибку в консоль
       });
   }
 }

@@ -52,6 +52,12 @@ export const updateProfile = (name, about) => {
       name: name,
       about: about,
     }),
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    // если ошибка, отклоняем промис
+    return Promise.reject(`Ошибка: ${res.status}`);
   });
 };
 
@@ -62,6 +68,12 @@ export const updateAvatar = (avatar) => {
     body: JSON.stringify({
       avatar: avatar,
     }),
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    // если ошибка, отклоняем промис
+    return Promise.reject(`Ошибка: ${res.status}`);
   });
 };
 
@@ -69,6 +81,12 @@ export const likeCard = (id) => {
   return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     headers: config.headers,
     method: "PUT",
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    // если ошибка, отклоняем промис
+    return Promise.reject(`Ошибка: ${res.status}`);
   });
 };
 
@@ -76,6 +94,12 @@ export const dislikeCard = (id) => {
   return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     headers: config.headers,
     method: "DELETE",
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    // если ошибка, отклоняем промис
+    return Promise.reject(`Ошибка: ${res.status}`);
   });
 };
 

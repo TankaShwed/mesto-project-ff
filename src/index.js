@@ -92,10 +92,14 @@ function handleProfilEditFormSubmit(evt) {
   profileDescription.textContent = jobInput.value;
   closeModal(editPopup);
   editPopup.querySelector(".popup__button").textContent = "Сохранение...";
-  updateProfile(nameInput.value, jobInput.value).then(() => {
-    closeModal(editPopup);
-    editPopup.querySelector(".popup__button").textContent = "Сохранить";
-  });
+  updateProfile(nameInput.value, jobInput.value)
+    .then(() => {
+      closeModal(editPopup);
+      editPopup.querySelector(".popup__button").textContent = "Сохранить";
+    })
+    .catch((err) => {
+      console.log(err); // выводим ошибку в консоль
+    });
 }
 
 function openImageCard(link, name) {
@@ -109,18 +113,21 @@ formAddCard.addEventListener("submit", function (evt) {
   const card = {
     name: cardNameInput.value,
     link: cardImageInput.value,
-    likes: [],
-    owner: {},
   };
   evt.preventDefault();
-  placesContent.prepend(makeCard(card, like, openDeleteCard, openImageCard));
-
   formAddCard.querySelector(".popup__button").textContent = "Сохранение...";
-  addNewCard(card).then(() => {
-    closeModal(addPopup);
-    formAddCard.reset();
-    formAddCard.querySelector(".popup__button").textContent = "Сохранить";
-  });
+  addNewCard(card)
+    .then((res) => {
+      closeModal(addPopup);
+      formAddCard.reset();
+      formAddCard.querySelector(".popup__button").textContent = "Сохранить";
+      placesContent.prepend(
+        makeCard(res, like, openDeleteCard, openImageCard, res.owner._id)
+      );
+    })
+    .catch((err) => {
+      console.log(err); // выводим ошибку в консоль
+    });
 });
 
 addButton.addEventListener("click", function () {
@@ -153,8 +160,7 @@ closeDeleteCardPopup.addEventListener("click", function () {
 formDeleteCardPopup.addEventListener("submit", function () {
   const id = deleteCardPopup.dataset.cardid;
   const card = document.querySelector("[data-cardid='" + id + "']");
-  deleteCard(card, id)
-  .then(() => {
+  deleteCard(card, id).then(() => {
     closeModal(deleteCardPopup);
   });
 });
@@ -174,30 +180,33 @@ formUpdateAvatarPopup.addEventListener("submit", function () {
   formUpdateAvatarPopup.querySelector(".popup__button").textContent =
     "Сохранение...";
   updateAvatar(updateAvatarInput.value)
-    .then((res) => res.json())
     .then(() => {
       closeModal(updateAvatarPopup);
       updateAvatarPopup.querySelector(".popup__button").textContent =
         "Сохранить";
+    })
+    .catch((err) => {
+      console.log(err); // выводим ошибку в консоль
     });
 });
 
 //validation
 enableValidation(validationConfig);
 
-Promise.all([
-  getUser(),
-  getInitialCards(),
-]).then(function (df) {
-  const user = df[0];
-  const cards = df[1];
-  console.log(user, cards);
-  profileName.textContent = user.name;
-  profileDescription.textContent = user.about;
-  imageProfile.style.backgroundImage = "url('" + user.avatar + "')";
-  cards.forEach((item) => {
-    placesContent.append(
-      makeCard(item, like, openDeleteCard, openImageCard, user._id)
-    );
+Promise.all([getUser(), getInitialCards()])
+  .then(function (df) {
+    const user = df[0];
+    const cards = df[1];
+    console.log(user, cards);
+    profileName.textContent = user.name;
+    profileDescription.textContent = user.about;
+    imageProfile.style.backgroundImage = "url('" + user.avatar + "')";
+    cards.forEach((item) => {
+      placesContent.append(
+        makeCard(item, like, openDeleteCard, openImageCard, user._id)
+      );
+    });
+  })
+  .catch((err) => {
+    console.log(err); // выводим ошибку в консоль
   });
-});
