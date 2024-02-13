@@ -69,6 +69,7 @@ const validationConfig = {
   errorClass: "popup__input-error_active",
 };
 const saveCaption = "Сохранить";
+const createImageCard = "Создать";
 const savingCaption = "Сохранение...";
 
 //Edit Profile
@@ -131,7 +132,7 @@ formAddCard.addEventListener("submit", function (evt) {
       console.log(err); // выводим ошибку в консоль
     })
     .finally(() => {
-      formAddCard.querySelector(".popup__button").textContent = saveCaption;
+      formAddCard.querySelector(".popup__button").textContent = createImageCard;
     });
 });
 
